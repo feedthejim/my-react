@@ -1,0 +1,44 @@
+{
+  "name": "my-react",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:feedthejim/my-react.git",
+  "author": "Jimmy Lai <laijimmy0@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.3.3",
+    "babel-register": "^6.24.1",
+    "browser-env": "^2.0.29",
+    "eslint": "^5.2.0",
+    "npm-run-all": "^4.0.2",
+    "rollup": "^0.41.6",
+    "rollup-plugin-commonjs": "8.4",
+    "rollup-plugin-node-resolve": "^3.3.0"
+  },
+  "babel": {
+    "plugins": [
+      [
+        "transform-react-jsx",
+        {}
+      ]
+    ],
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ]
+  },
+  "dependencies": {
+    "ramda": "^0.25.0"
+  }
+}
