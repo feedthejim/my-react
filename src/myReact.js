@@ -1,3 +1,5 @@
+/** @jsx createElement */
+
 import * as R from 'ramda';
 
 const TEXT_DOCUMENT = 'TEXT_DOCUMENT';
@@ -55,6 +57,39 @@ const render = (element, parentDom) =>
       ),
     ),
   )(element);
+
+// function createElement(type, config, ...args) {
+//   const props = Object.assign({}, config);
+//   const hasChildren = args.length > 0;
+//   const rawChildren = hasChildren ? [].concat(...args) : [];
+//   props.children = rawChildren
+//     .filter(c => c != null && c !== false)
+//     .map(c => c instanceof Object ? c : createTextElement(c));
+//   return { type, props };
+// }
+
+// function createTextElement(value) {
+//   return createElement(TEXT_ELEMENT, { nodeValue: value });
+// }
+
+const createTextElement = value =>
+  createElement(TEXT_DOCUMENT, { nodeValue: value });
+
+const createElement = (type, config, ...args) =>
+  R.compose(
+    children => ({
+      type,
+      config: {
+        ...config,
+        children,
+      },
+    }),
+    R.map(R.unless(c => c instanceof Object, createTextElement, c)),
+    R.filter(c => R.and(R.not(R.isNil(c), R.equals(c, false)))),
+    R.defaultTo(args, []),
+  )();
+
+const tot = <div>mdr</div>;
 
 const stories = [
   { name: 'Didact introduction', url: 'http://bit.ly/2pX7HNn' },
