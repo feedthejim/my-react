@@ -36,8 +36,7 @@ const addAttributeToDom = R.curry((element, parent) =>
 const renderChildren = R.curry((element, dom) =>
   R.compose(
     R.forEach(R.flip(render)(dom)),
-    R.propOr([], 'children'),
-    R.prop('props'),
+    R.pathOr(['props', 'children']),
   )(element),
 );
 
@@ -49,10 +48,7 @@ const render = (element, parentDom) =>
     R.tap(addEventListenerToDom(element)),
     R.ifElse(
       R.propSatisfies(R.equals(TEXT_DOCUMENT), 'type'),
-      R.compose(
-        R.bind(document.createTextNode, document),
-        () => '',
-      ),
+      () => document.createTextNode(''),
       R.compose(
         R.bind(document.createElement, document),
         R.prop('type'),
