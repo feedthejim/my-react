@@ -38,7 +38,7 @@ const addAttributeToDom = R.curry((element, parent) =>
 const renderChildren = R.curry((element, dom) =>
   R.compose(
     R.forEach(R.flip(render)(dom)),
-    R.pathOr(['props', 'children']),
+    R.pathOr([], ['props', 'children']),
   )(element),
 );
 
@@ -49,7 +49,7 @@ const render = (element, parentDom) =>
     R.tap(addAttributeToDom(element)),
     R.tap(addEventListenerToDom(element)),
     R.ifElse(
-      R.propSatisfies(R.equals(TEXT_DOCUMENT), 'type'),
+      R.compose(R.propSatisfies(R.equals(TEXT_DOCUMENT), 'type')),
       () => document.createTextNode(''),
       R.compose(
         R.bind(document.createElement, document),
@@ -79,15 +79,14 @@ const createElement = (type, config, ...args) =>
   R.compose(
     children => ({
       type,
-      config: {
+      props: {
         ...config,
         children,
       },
     }),
-    R.map(R.unless(c => c instanceof Object, createTextElement, c)),
-    R.filter(c => R.and(R.not(R.isNil(c), R.equals(c, false)))),
-    R.defaultTo(args, []),
-  )();
+    R.map(R.unless(R.is(Object), createTextElement)),
+    R.filter(c => R.not(R.or(R.isNil(c), R.equals(c, false)))),
+  )(R.defaultTo([], args));
 
 const tot = <div>mdr</div>;
 
@@ -140,4 +139,4 @@ const appElement = {
   },
 };
 
-render(appElement, document.getElementById('root'));
+render(tot, document.getElementById('root'));
