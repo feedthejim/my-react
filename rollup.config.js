@@ -24,7 +24,6 @@ export default {
       exclude: 'node_modules/**',
       babelrc: false,
       presets: [
-        'react',
         [
           'env',
           {
